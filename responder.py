@@ -70,7 +70,7 @@ def sql_top_categories(con, n=10, months: Optional[int]=None):
     if months:
         time_clause = f"AND Transaction_Date >= now() - INTERVAL {months} MONTH"
     q = f"""
-        SELECT Category, -(SUM(Debit_Amount) - SUM(Credit_Amount)) AS spend
+        SELECT Category, (SUM(Debit_Amount) - SUM(Credit_Amount)) AS spend
         from transactions
         WHERE (Debit_Amount - Credit_Amount) > 0 {time_clause}
         GROUP BY 1
