@@ -23,12 +23,16 @@ except Exception:
 # Read API key from file config/openai_key.txt
 def _read_key():
     p = os.path.join("config", "openai_key.txt")
-    try:
-        with open(p, "r", encoding="utf-8") as fh:
-            k = fh.read().strip()
-            return k if k else None
-    except Exception:
-        return None
+    if os.path.exists(p):
+        try:
+            with open(p, "r", encoding="utf-8") as fh:
+                k = fh.read().strip()
+                return k if k else None
+        except Exception:
+            pass
+
+    # Fallback: check environment variable
+    return os.getenv("OPENAI_API_KEY")
 
 OPENAI_API_KEY = _read_key()
 
